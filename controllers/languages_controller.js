@@ -50,6 +50,30 @@ languages.get('/', (req, res) => {
         })
 })
 
+// // Random
+// languages.get('/random', (req,res) => {
+//     Language.create({name:req.name.random()})
+//         .then(foundLanguage => {
+//             res.json(foundLanguage)
+//         })
+// })
+
+// random language
+languages.get('/random', async (req,res) => {
+    //use to count the number of documents are avaliable
+    let docCount = await Language.countDocuments()
+
+    //create a random document number
+    let randomDoc = Math.floor(Math.random() * docCount)
+
+    //find one document and skip to the randomly generated number above
+    Language.findOne().skip(randomDoc)
+        .then(foundLanguage => {
+            res.json(foundLanguage)
+        })
+})
+
+
 // Show:
 languages.get('/:name', (req, res) => {
     Language.findOne({ name: req.params.name.toLowerCase() })
@@ -57,3 +81,9 @@ languages.get('/:name', (req, res) => {
             res.json(foundLanguage)
         })
 })
+
+
+// languages.get('/:name', (req,res) => {
+//     let foundLanguage = Language.findOne(req.params.name.toLowerCase())
+//     res.json(foundLanguage)
+// } )
